@@ -176,16 +176,3 @@ INTERNAL_IPS = ["127.0.0.1"]
 
 # Django extension settings
 SHELL_PLUS = "ipython"
-
-REST_FRAMEWORK = {
-    # YOUR SETTINGS
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-}
-
-SPECTACULAR_SETTINGS = {"COMPONENT_SPLIT_REQUEST": True}
-
-
-# CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
-CORS_ORIGIN_ALLOW_ALL = True
-
-ALLOWED_HOSTS = ["localhost", "192.168.2.39", "127.0.0.1"]
