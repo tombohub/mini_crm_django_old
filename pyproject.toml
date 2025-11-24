@@ -1,0 +1,45 @@
+[project]
+name = "django-old"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "django>=5.0.3,<5.2",
+    "whitenoise>=6.6.0",
+    "django-crispy-forms>=2.1",
+    "crispy-bootstrap5>=2024.2",
+    "django-cleanup>=8.1.0",
+    "django-imagekit>=5.0.0",
+    "django-debug-toolbar>=4.3.0",
+    "django-extensions>=3.2.3",
+    "ipython>=8.22.2",
+    "django-browser-reload>=1.12.1",
+    "django-silk>=5.1.0",
+    "django-data-browser>=4.2.8",
+    "django-cors-headers>=4.3.1",
+    "django-fsm>=2.8.1",
+    "beautifulsoup4>=4.12.3",
+    "django-widget-tweaks>=1.5.0",
+    "python-decouple>=3.8",
+    "django-active-link>=0.1.8",
+    "libsass>=0.23.0",
+    "openpyxl>=3.1.2",
+    "ez-address-parser>=0.2.5",
+    "django-filter>=24.2",
+    "psycopg2-binary>=2.9.9",
+    "django-fastdev>=1.9.0",
+    "aiohttp>=3.9.5",
+    "dj-database-url>=3.0.1",
+    "python-dotenv>=1.2.1",
+    "pandas>=2.3.3",
+    "uvicorn>=0.38.0",
+]
+
+
+[dependency-groups]
+dev = ["djlint>=1.36.4"]
+
+[tool.djlint]
+profile = "django"
+ignore = "T002,H030,H031,D018"

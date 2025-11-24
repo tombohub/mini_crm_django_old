@@ -1,0 +1,9 @@
+{% load active_link_tags %}
+<nav>
+    <div class="list-group">
+        <a class="list-group-item list-group-item-action {% active_link 'home:call-records' %}"
+           href="{% url 'home:call-records' %}">Call Records</a>
+        <a class="list-group-item list-group-item-action {% active_link 'home:prospects-list' %}"
+           href="{% url 'home:prospects-list' %}">Prospects</a>
+    </div>
+</nav>

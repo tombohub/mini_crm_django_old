@@ -1,0 +1,7 @@
+{% extends 'home/base.html' %}
+{% block content %}
+    <a href="{% url 'home:call-records-create' %}" class="btn btn-primary">New</a>
+    <a href="{% url 'home:call-records-delete-all' %}"
+       class="btn btn-danger"
+       onclick="return confirm('Do you really want to delete calls')">Delete Calls</a>
+{% endblock content %}

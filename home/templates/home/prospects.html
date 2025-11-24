@@ -1,0 +1,113 @@
+{% extends 'home/base.html' %}
+{% load crispy_forms_filters %}
+{% load widget_tweaks %}
+{% block content %}
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="{% if message.tags %}alert alert-{{ message.tags }}{% endif %}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {# stats #}
+    <div>
+        <small>Vancouver: {{ local_times.vancouver }}</small> |
+        <small>Edmonton: {{ local_times.edmonton }}</small> |
+        <small>Winnipeg: {{ local_times.winnipeg }}</small> |
+        <small>Toronto: {{ local_times.toronto }}</small> |
+        <small>Halifax: {{ local_times.halifax }}</small> |
+    </div>
+    <div>
+        <small>NOs: {{ outcome_no_count }}</small> |
+        <small>Calls total: {{ total_calls_count }}</small> |
+        <small>Calls today: {{ calls_today }}</small> |
+        <small>Prospects total: {{ prospects_total_count }}</small> |
+        <small>Prospects filtered: {{ prospects_filtered_count }}</small>
+    </div>
+    {# stats end #}
+    {# filters start #}
+    <button class="btn btn-sm"
+            data-bs-toggle="collapse"
+            data-bs-target="#filters">
+        Filter <i class="bi bi-filter"></i>
+    </button>
+    <div class="collapse" id="filters">
+        <div class="card card-body">
+            <form>
+                {{ prospects_filter.form|crispy }}
+                <button class="btn btn-secondary">Apply</button>
+            </form>
+        </div>
+    </div>
+    {# filters end #}
+    {#    prospect loop#}
+    <div class="vstack gap-4 mt-3">
+        {% for prospect in prospects_paginated %}
+            <div class="card">
+                <div class="card-body">
+                    <div class="vstack gap-2">
+                        <p class="card-text">
+                            <span>Name: {{ prospect.business_name }}</span>
+                            <br>
+                            <span>City: {{ prospect.city }}</span>
+                            <br>
+                            <span>Industry: {{ prospect.industry }}</span>
+                            <br>
+                        <span> Web: <a href="{{ prospect.website_url }}" target="_blank">{{ prospect.website_url }}</a>
+                    </span>
+                    <br>
+                <span> YP: <a href="{{ prospect.yellow_pages_link }}" target="_blank">Yellow Pages</a>
+            </span>
+        </p>
+        <p class="card-text">
+            <span>Phone:</span>
+            <br>
+            <span>{{ prospect.phone_number }}</span>
+        </p>
+        {# badges #}
+        <div>
+            {% if prospect.had_owner_conversation %}
+                <span class="badge text-bg-success rounded-pill">Had conversation</span>
+            {% endif %}
+            {% if prospect.has_been_called %}<span class="badge text-bg-warning rounded-pill">Called</span>{% endif %}
+        </div>
+        <a class="btn btn-primary d-block"
+           href="{% url 'home:prospects--call-record-create' prospect_id=prospect.id %}?next={{ request.get_full_path|urlencode }}">
+            Make a call <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+</div>
+</div>
+{% endfor %}
+</div>
+{#end prospects loop#}
+{# prospects pagination #}
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        {% if prospects_paginated.has_previous %}
+            <li class="page-item">
+                <a class="page-link"
+                   href="?{{ request.GET.urlencode }}&page={{ prospects_paginated.previous_page_number }}">Previous</a>
+            </li>
+        {% endif %}
+        {% if prospects_paginated.has_next %}
+            <li class="page-item">
+                <a class="page-link"
+                   href="?{{ request.GET.urlencode }}&page={{ prospects_paginated.next_page_number }}">Next</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+<hr>
+<div class="vstack gap-1 mt-2">
+    {#  import excel form #}
+    <a class="btn btn-secondary"
+       href="{% url 'home:prospects-import-excel' %}">
+        Import Excel <i class="bi bi-filetype-xlsx"></i>
+    </a>
+    {# delete all prospects #}
+    <a class="btn btn-danger"
+       href="{% url 'home:prospects-delete-all' %}"
+       onclick="return confirm('Do you really want to delete prospects')">Delete Prospects</a>
+</div>
+{% endblock content %}

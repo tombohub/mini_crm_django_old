@@ -1,0 +1,35 @@
+$gray-100: #f0f3f4;
+$gray-200: #d2dadf;
+$gray-300: #b5c1ca;
+$gray-400: #97a9b5;
+$gray-500: #79909f;
+$gray-600: #607786;
+$gray-700: #4a5c68;
+$gray-800: #35424a;
+$gray-900: #20282d;
+
+// Chromatic Color Variables
+$blue: #1b4965; // Brightened for vibrancy
+$red: #d2465d; // Made slightly richer
+$orange: #eca83c; // Warmer tone
+$yellow: #edc03d; // A tad lighter for visibility
+$green: #8cab57; // Darkened for depth
+$cyan: #e5f8fc;
+$teal: #c8e7e5; // Adjusted for consistency
+
+
+$card-border-width: 0;
+$list-group-border-width: 0;
+
+$scale: 1.3;
+
+//$spacer: 1rem * $scale;
+$font-size-base: 1rem * $scale;
+
+@import "bootstrap/scss/bootstrap.scss";
+
+
+
+
+
+

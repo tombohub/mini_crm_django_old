@@ -1,0 +1,8 @@
+{% extends 'home/base.html' %}
+{% load crispy_forms_filters %}
+{% block content %}
+    <form>
+        {% csrf_token %}
+        {{ yp_fo }}
+    </form>
+{% endblock content %}

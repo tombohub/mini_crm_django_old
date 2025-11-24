@@ -1,0 +1,37 @@
+{% extends 'home/base.html' %}
+{% load crispy_forms_filters %}
+{% block content %}
+    <a href="tel:{{ prospect.phone_number }}">
+        <span class="fs-4">
+            <i class="bi bi-telephone">&nbsp;&nbsp;</i> {{ prospect.phone_number }}
+        </span>
+    </a>
+    <div class="hstack justify-content-between">
+        <div class="d-inline">
+            Prospect exists:
+            <span id="exists_status">{{ prospect.existence_status }}</span>
+            <span id="indicator" class="htmx-indicator spinner-border"></span>
+        </div>
+        <div>
+            <button hx-get="{% url 'home:htmx' action='update_existence_status' %}?existence_status=exists&prospect_id={{ prospect.id }}"
+                    hx-trigger="click"
+                    hx-target="#exists_status"
+                    hx-indicator="#indicator"
+                    hx-disabled-elt="this"
+                    class="btn btn-success">Yes</button>
+            <button hx-get="{% url 'home:htmx' action='update_existence_status' %}?existence_status=does_not_exist&prospect_id={{ prospect.id }}"
+                    hx-trigger="click"
+                    hx-target="#exists_status"
+                    hx-indicator="#indicator"
+                    hx-disabled-elt="this"
+                    class="btn btn-danger">No</button>
+        </div>
+    </div>
+    <form method="post">
+        <div class="vstack gap-2">
+            {% csrf_token %}
+            {{ call_record_form|crispy }}
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+{% endblock content %}
