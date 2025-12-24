@@ -152,7 +152,7 @@ MEDIA_URL = "media/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-CSRF_TRUSTED_ORIGINS = ["https://tomo-production-2114.up.railway.app"]
+CSRF_TRUSTED_ORIGINS = ["https://minicrmdjangoold-production.up.railway.app"]
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
