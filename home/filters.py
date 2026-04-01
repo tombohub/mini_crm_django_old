@@ -4,6 +4,7 @@ from . import models
 
 
 class ProspectsFilter(django_filters.FilterSet):
+    industry = django_filters.AllValuesFilter(field_name="industry", label="Industry")
     called = django_filters.BooleanFilter(field_name="called", label="Called")
     conversation = django_filters.BooleanFilter(
         field_name="conversation", label="Conversation"
@@ -11,4 +12,4 @@ class ProspectsFilter(django_filters.FilterSet):
 
     class Meta:
         model = models.Prospect
-        fields = ["province"]
+        fields = ["province", "industry"]
