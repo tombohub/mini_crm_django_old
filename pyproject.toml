@@ -38,7 +38,10 @@ dependencies = [
 
 
 [dependency-groups]
-dev = ["djlint>=1.36.4"]
+dev = [
+    "django-stubs>=6.0.1",
+    "djlint>=1.36.4",
+]
 
 [tool.djlint]
 profile = "django"

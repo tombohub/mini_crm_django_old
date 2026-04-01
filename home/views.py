@@ -141,9 +141,11 @@ def htmx_test(request, action: str):
             existence_status = request.GET.get("existence_status")
             prospect_id = request.GET.get("prospect_id")
             if not existence_status:
-                return HttpResponseBadRequest("existence_status is not in query param")
+                return HttpResponseBadRequest(
+                    b"existence_status is not in query param"
+                )
             if not prospect_id:
-                return HttpResponseBadRequest("prospect_id is not in query param")
+                return HttpResponseBadRequest(b"prospect_id is not in query param")
 
             prospect = Prospect.objects.get(id=prospect_id)
             prospect.existence_status = existence_status
@@ -154,4 +156,4 @@ def htmx_test(request, action: str):
             return render(request, "home/htmx/test.html", context)
 
         case _:
-            return HttpResponseBadRequest(f"invalid action: {action}")
+            return HttpResponseBadRequest(f"invalid action: {action}".encode())

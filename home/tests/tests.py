@@ -1,9 +1,11 @@
 from io import BytesIO
+from typing import cast
 from unittest import TestCase as UnittestTestCase
 
 import pandas as pd
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase as DjangoTestCase
+from pandas.io.excel._base import WriteExcelBuffer
 
 from home import services
 from home.business_data_extractor.extractor import extract_data
@@ -121,22 +123,22 @@ class TestParseYellowpagesCAAddress(UnittestTestCase):
 class TestIsXlsxFunction(UnittestTestCase):
     def test_file_with_xlsx_extension(self):
         # Create a mock UploadedFile object with .xlsx extension
-        file = SimpleUploadedFile("test.xlsx", "")
+        file = SimpleUploadedFile("test.xlsx", "".encode())
         self.assertTrue(services.is_xlsx(file))
 
     def test_file_with_uppercase_xlsx_extension(self):
         # Testing case insensitivity
-        file = SimpleUploadedFile("test.XLSX", "")
+        file = SimpleUploadedFile("test.XLSX", "".encode())
         self.assertTrue(services.is_xlsx(file))
 
     def test_file_with_incorrect_extension(self):
         # Test with a non-.xlsx file
-        file = SimpleUploadedFile("test.pdf", "")
+        file = SimpleUploadedFile("test.pdf", "".encode())
         self.assertFalse(services.is_xlsx(file))
 
     def test_file_with_similar_extension(self):
         # Test with a similar but incorrect extension
-        file = SimpleUploadedFile("test.xls", "")
+        file = SimpleUploadedFile("test.xls", "".encode())
         self.assertFalse(services.is_xlsx(file))
 
 
@@ -145,7 +147,9 @@ class TestValidateExcelColumns(UnittestTestCase):
         """Helper function to create a mock Excel file."""
         df = pd.DataFrame(columns=columns)
         excel_io = BytesIO()
-        df.to_excel(excel_io, index=False)
+        excel_buffer = cast(WriteExcelBuffer, excel_io)
+        with pd.ExcelWriter(excel_buffer, engine="openpyxl") as writer:
+            df.to_excel(writer, index=False)
         excel_io.seek(0)
         return SimpleUploadedFile(
             "test.xlsx",
