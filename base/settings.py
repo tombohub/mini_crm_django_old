@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     "imagekit",
     "debug_toolbar",
     "django_extensions",
-    "django_browser_reload",
     "silk",
     "data_browser",
     "corsheaders",
@@ -71,7 +70,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
     "silk.middleware.SilkyMiddleware",
 ]
 
