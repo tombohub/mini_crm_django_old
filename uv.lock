@@ -323,15 +323,6 @@ wheels = [
 ]
 
 [[package]]
-name = "django-fastdev"
-version = "1.13.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/ca/b0/67cc7b0ebc130deb786ce574c37aa4c7c0c450372cfcd886fa7251d1047d/django_fastdev-1.13.0.tar.gz", hash = "sha256:15246f8745c176e2fb6d023a5b5e3921e6276eccbe49c6213756aea1527f4174", size = 16393, upload-time = "2024-11-26T07:40:30.494Z" }
-
-[[package]]
 name = "django-filter"
 version = "25.1"
 source = { registry = "https://pypi.org/simple" }
@@ -383,7 +374,6 @@ dependencies = [
     { name = "django-data-browser" },
     { name = "django-debug-toolbar" },
     { name = "django-extensions" },
-    { name = "django-fastdev" },
     { name = "django-filter" },
     { name = "django-fsm" },
     { name = "django-imagekit" },
@@ -422,7 +412,6 @@ requires-dist = [
     { name = "django-data-browser", specifier = ">=4.2.8" },
     { name = "django-debug-toolbar", specifier = ">=4.3.0" },
     { name = "django-extensions", specifier = ">=3.2.3" },
-    { name = "django-fastdev", specifier = ">=1.9.0" },
     { name = "django-filter", specifier = ">=24.2" },
     { name = "django-fsm", specifier = ">=2.8.1" },
     { name = "django-imagekit", specifier = ">=5.0.0" },

@@ -57,7 +57,6 @@ INSTALLED_APPS = [
     "widget_tweaks",
     "active_link",
     "django_filters",
-    "django_fastdev",
     # django-cleanup needs to be last
     "django_cleanup",
 ]
