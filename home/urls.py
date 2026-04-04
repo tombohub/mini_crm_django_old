@@ -8,11 +8,6 @@ urlpatterns = [
     path("", views.home, name="home"),
     path("call-records/", views.call_records_list, name="call-records"),
     path("call-records/create", views.call_record_create, name="call-records-create"),
-    path(
-        "call-records/delete-all",
-        views.call_records_delete_all,
-        name="call-records-delete-all",
-    ),
     path("prospects/", views.prospects_list, name="prospects-list"),
     path(
         "prospects/import-excel",

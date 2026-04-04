@@ -124,11 +124,6 @@ def call_record_create(request):
     )
 
 
-def call_records_delete_all(request):
-    ColdCallRecord.objects.all().delete()
-    return redirect("home:call-records")
-
-
 def htmx_test(request, action: str):
     match action:
         case "update_existence_status":
