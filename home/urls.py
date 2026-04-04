@@ -15,9 +15,6 @@ urlpatterns = [
     ),
     path("prospects/", views.prospects_list, name="prospects-list"),
     path(
-        "prospects/delete-all", views.prospects_delete_all, name="prospects-delete-all"
-    ),
-    path(
         "prospects/import-excel",
         views.prospects_import_excel,
         name="prospects-import-excel",

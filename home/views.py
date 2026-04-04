@@ -43,12 +43,6 @@ def prospects_list(request):
     }
     return render(request, "home/prospects.html", context)
 
-
-def prospects_delete_all(request):
-    Prospect.objects.all().delete()
-    return redirect("home:prospects-list")
-
-
 def prospects_import_excel(request):
     if request.method == "POST":
         import_excel_form = ImportXlsxForm(request.POST, request.FILES)
