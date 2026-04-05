@@ -305,6 +305,39 @@ class ProspectCreateViewTest(DjangoTestCase):
         self.assertIn("Prospect created successfully.", messages)
         self.assertContains(response, "Prospect created successfully.")
 
+    def test_prospects_list_orders_newest_first(self):
+        older = Prospect.objects.create(
+            business_name="Older Prospect",
+            industry="Electrician",
+            phone_number="416-555-0101",
+        )
+        newer = Prospect.objects.create(
+            business_name="Newer Prospect",
+            industry="Plumber",
+            phone_number="416-555-0102",
+        )
+
+        response = self.client.get(reverse("home:prospects-list"))
+
+        prospects_paginated = list(response.context["prospects_paginated"])
+        self.assertEqual(prospects_paginated[0].id, newer.id)
+        self.assertEqual(prospects_paginated[1].id, older.id)
+
+    def test_just_created_prospect_has_highlighted_border_once(self):
+        response = self.client.post(
+            reverse("home:prospects-create"),
+            {
+                "prospect_json": '{"business_name": "Acme Inc", "industry": "Electrician", "phone_number": "416-555-0100"}'
+            },
+            follow=True,
+        )
+
+        self.assertContains(response, "card border-primary border-3")
+
+        follow_up_response = self.client.get(reverse("home:prospects-list"))
+
+        self.assertNotContains(follow_up_response, "card border-primary border-3")
+
     def test_post_invalid_json_renders_errors_and_preserves_input(self):
         payload = '{"business_name": "Acme Inc", "unknown_field": "value"}'
         response = self.client.post(

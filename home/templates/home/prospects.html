@@ -43,7 +43,7 @@
     {#    prospect loop#}
     <div class="vstack gap-4 mt-3">
         {% for prospect in prospects_paginated %}
-            <div class="card">
+            <div class="card {% if prospect.id == highlighted_prospect_id %}border-primary border-3{% endif %}">
                 <div class="card-body">
                     <div class="vstack gap-2">
                         <p class="card-text">

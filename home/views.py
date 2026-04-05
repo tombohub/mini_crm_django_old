@@ -17,6 +17,8 @@ def home(request):
 
 
 def prospects_list(request):
+    highlighted_prospect_id = request.session.pop("highlighted_prospect_id", None)
+
     prospects = Prospect.objects.prefetch_related("coldcallrecord_set").annotate(
         called=Exists(ColdCallRecord.objects.filter(prospect_id=OuterRef("pk"))),
         conversation=Exists(
@@ -24,7 +26,7 @@ def prospects_list(request):
                 prospect_id=OuterRef("pk"), had_owner_conversation=True
             )
         ),
-    )
+    ).order_by("-created_at")
 
     prospects_filter = filters.ProspectsFilter(request.GET, queryset=prospects)
 
@@ -40,6 +42,7 @@ def prospects_list(request):
         "calls_today": services.calls_today_count(),
         "prospects_total_count": services.prospects_total_count(),
         "local_times": services.get_city_local_times(),
+        "highlighted_prospect_id": highlighted_prospect_id,
     }
     return render(request, "home/prospects.html", context)
 
@@ -48,7 +51,8 @@ def prospects_create(request):
     if request.method == "POST":
         prospect_create_form = ProspectJsonCreateForm(request.POST)
         if prospect_create_form.is_valid():
-            prospect_create_form.save()
+            prospect = prospect_create_form.save()
+            request.session["highlighted_prospect_id"] = prospect.id
             messages.success(request, "Prospect created successfully.")
             return redirect("home:prospects-list")
     else:
