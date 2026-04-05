@@ -1,3 +1,5 @@
+import json
+
 from django import forms
 from django.core.exceptions import ValidationError
 
@@ -54,3 +56,85 @@ class ProspectsFilterForm(forms.ModelForm):
     class Meta:
         model = Prospect
         fields = ["province"]
+
+
+class ProspectJsonCreateForm(forms.Form):
+    """
+    Create a prospect from a JSON payload.
+    """
+
+    prospect_json = forms.CharField(
+        label="Prospect JSON",
+        widget=forms.Textarea(
+            attrs={
+                "class": "form-control",
+                "rows": 8,
+                "spellcheck": "false",
+                "placeholder": '{\n  "business_name": "Acme Inc",\n  "industry": "Roofing",\n  "phone_number": "416-555-0100"\n}',
+            }
+        ),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        raw_json = cleaned_data.get("prospect_json")
+        if not raw_json:
+            return cleaned_data
+
+        try:
+            payload = json.loads(raw_json)
+        except json.JSONDecodeError as exc:
+            self.add_error("prospect_json", f"Invalid JSON: {exc.msg}")
+            return cleaned_data
+
+        if not isinstance(payload, dict):
+            self.add_error("prospect_json", "JSON payload must be an object.")
+            return cleaned_data
+
+        managed_fields = {"id", "created_at", "updated_at"}
+        present_managed_fields = sorted(managed_fields.intersection(payload))
+        if present_managed_fields:
+            self.add_error(
+                "prospect_json",
+                "These fields are managed automatically: "
+                + ", ".join(present_managed_fields),
+            )
+
+        allowed_fields = {
+            field.name
+            for field in Prospect._meta.fields
+            if field.editable and not field.auto_created
+        }
+        unknown_fields = sorted(set(payload) - allowed_fields)
+        if unknown_fields:
+            self.add_error(
+                "prospect_json",
+                "Unknown fields: " + ", ".join(unknown_fields),
+            )
+
+        if self.errors:
+            return cleaned_data
+
+        prospect = Prospect(**payload)
+        try:
+            prospect.full_clean()
+        except ValidationError as exc:
+            if hasattr(exc, "message_dict"):
+                for field_name, errors in exc.message_dict.items():
+                    for error in errors:
+                        self.add_error(
+                            None,
+                            f"{field_name.replace('_', ' ').capitalize()}: {error}",
+                        )
+            else:
+                for error in exc.messages:
+                    self.add_error(None, error)
+            return cleaned_data
+
+        self.cleaned_data["prospect_instance"] = prospect
+        return cleaned_data
+
+    def save(self) -> Prospect:
+        prospect = self.cleaned_data["prospect_instance"]
+        prospect.save()
+        return prospect

@@ -1,0 +1,32 @@
+{% extends 'home/base.html' %}
+{% block content %}
+    {# create prospect page header #}
+    <div class="mb-3">
+        <h1 class="h3 mb-1">Add Prospect</h1>
+        <p class="text-muted mb-0">Paste a JSON object that matches the Prospect model fields.</p>
+    </div>
+    {# create prospect form #}
+    <form method="post">
+        {% csrf_token %}
+        {% if prospect_create_form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in prospect_create_form.non_field_errors %}<div>{{ error }}</div>{% endfor %}
+            </div>
+        {% endif %}
+        <div class="mb-3">
+            <label class="form-label" for="{{ prospect_create_form.prospect_json.id_for_label }}">
+                {{ prospect_create_form.prospect_json.label }}
+            </label>
+            {{ prospect_create_form.prospect_json }}
+            {% if prospect_create_form.prospect_json.errors %}
+                <div class="invalid-feedback d-block">
+                    {% for error in prospect_create_form.prospect_json.errors %}<div>{{ error }}</div>{% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Create Prospect</button>
+            <a class="btn btn-outline-secondary" href="{% url 'home:prospects-list' %}">Cancel</a>
+        </div>
+    </form>
+{% endblock content %}

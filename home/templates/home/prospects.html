@@ -2,13 +2,13 @@
 {% load crispy_forms_filters %}
 {% load widget_tweaks %}
 {% block content %}
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <div class="{% if message.tags %}alert alert-{{ message.tags }}{% endif %}">{{ message }}</div>
-            {% endfor %}
-        </div>
-    {% endif %}
+    {# prospects primary actions #}
+    <div class="mb-3">
+        {# create prospect from pasted json #}
+        <a class="btn btn-primary" href="{% url 'home:prospects-create' %}">
+            New Prospect <i class="bi bi-plus-circle"></i>
+        </a>
+    </div>
     {# stats #}
     <div>
         <small>Vancouver: {{ local_times.vancouver }}</small> |
@@ -100,7 +100,7 @@
 </nav>
 <hr>
 <div class="vstack gap-1 mt-2">
-    {#  import excel form #}
+    {# import prospects from excel file #}
     <a class="btn btn-secondary"
        href="{% url 'home:prospects-import-excel' %}">
         Import Excel <i class="bi bi-filetype-xlsx"></i>

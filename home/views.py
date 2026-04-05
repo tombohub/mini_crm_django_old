@@ -8,7 +8,7 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 
 from . import filters, services
-from .forms import CallRecordForm, ImportXlsxForm
+from .forms import CallRecordForm, ImportXlsxForm, ProspectJsonCreateForm
 from .models import ColdCallRecord, Prospect
 
 
@@ -42,6 +42,21 @@ def prospects_list(request):
         "local_times": services.get_city_local_times(),
     }
     return render(request, "home/prospects.html", context)
+
+
+def prospects_create(request):
+    if request.method == "POST":
+        prospect_create_form = ProspectJsonCreateForm(request.POST)
+        if prospect_create_form.is_valid():
+            prospect_create_form.save()
+            messages.success(request, "Prospect created successfully.")
+            return redirect("home:prospects-list")
+    else:
+        prospect_create_form = ProspectJsonCreateForm()
+
+    context = {"prospect_create_form": prospect_create_form}
+    return render(request, "home/prospects_create.html", context)
+
 
 def prospects_import_excel(request):
     if request.method == "POST":

@@ -1,14 +1,15 @@
 from io import BytesIO
-from typing import cast
 from unittest import TestCase as UnittestTestCase
 
 import pandas as pd
+from django.contrib.messages import get_messages
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase as DjangoTestCase
-from pandas.io.excel._base import WriteExcelBuffer
+from django.urls import reverse
 
 from home import services
 from home.business_data_extractor.extractor import extract_data
+from home.forms import ProspectJsonCreateForm
 from home.models import ColdCallRecord, Prospect
 from home.services import (
     import_prospects_from_excel,
@@ -147,8 +148,7 @@ class TestValidateExcelColumns(UnittestTestCase):
         """Helper function to create a mock Excel file."""
         df = pd.DataFrame(columns=columns)
         excel_io = BytesIO()
-        excel_buffer = cast(WriteExcelBuffer, excel_io)
-        with pd.ExcelWriter(excel_buffer, engine="openpyxl") as writer:
+        with pd.ExcelWriter(excel_io, engine="openpyxl") as writer:
             df.to_excel(writer, index=False)
         excel_io.seek(0)
         return SimpleUploadedFile(
@@ -225,3 +225,103 @@ class TestParseWebsiteUrl(UnittestTestCase):
             expected_url,
             "The function should correctly parse even from a malformed base URL.",
         )
+
+
+class ProspectJsonCreateFormTest(DjangoTestCase):
+    def test_accepts_valid_json(self):
+        form = ProspectJsonCreateForm(
+            data={
+                "prospect_json": '{"business_name": "Acme Inc", "industry": "Roofing", "phone_number": "416-555-0100"}'
+            }
+        )
+
+        self.assertTrue(form.is_valid())
+
+        prospect = form.save()
+
+        self.assertEqual(prospect.business_name, "Acme Inc")
+        self.assertEqual(prospect.industry, "Roofing")
+
+    def test_rejects_malformed_json(self):
+        form = ProspectJsonCreateForm(data={"prospect_json": '{"business_name": '})
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("Invalid JSON", form.errors["prospect_json"][0])
+
+    def test_rejects_unknown_fields(self):
+        form = ProspectJsonCreateForm(
+            data={
+                "prospect_json": '{"business_name": "Acme Inc", "industry": "Roofing", "unknown_field": "value"}'
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("Unknown fields: unknown_field", form.errors["prospect_json"])
+
+    def test_rejects_managed_fields(self):
+        form = ProspectJsonCreateForm(
+            data={
+                "prospect_json": '{"business_name": "Acme Inc", "industry": "Roofing", "created_at": "2024-01-01T00:00:00Z"}'
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn(
+            "These fields are managed automatically: created_at",
+            form.errors["prospect_json"],
+        )
+
+    def test_surfaces_model_validation_errors(self):
+        form = ProspectJsonCreateForm(data={"prospect_json": '{"business_name": "Acme Inc"}'})
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("Industry: This field cannot be blank.", form.non_field_errors())
+
+
+class ProspectCreateViewTest(DjangoTestCase):
+    def test_get_renders_create_page(self):
+        response = self.client.get(reverse("home:prospects-create"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Add Prospect")
+
+    def test_post_valid_json_creates_prospect_and_redirects(self):
+        response = self.client.post(
+            reverse("home:prospects-create"),
+            {
+                "prospect_json": '{"business_name": "Acme Inc", "industry": "Roofing", "phone_number": "416-555-0100"}'
+            },
+            follow=True,
+        )
+
+        self.assertRedirects(response, reverse("home:prospects-list"))
+        self.assertTrue(
+            Prospect.objects.filter(
+                phone_number="416-555-0100",
+                industry="Roofing",
+            ).exists()
+        )
+        messages = [message.message for message in get_messages(response.wsgi_request)]
+        self.assertIn("Prospect created successfully.", messages)
+        self.assertContains(response, "Prospect created successfully.")
+
+    def test_post_invalid_json_renders_errors_and_preserves_input(self):
+        payload = '{"business_name": "Acme Inc", "unknown_field": "value"}'
+        response = self.client.post(
+            reverse("home:prospects-create"),
+            {"prospect_json": payload},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Unknown fields: unknown_field")
+        self.assertEqual(
+            response.context["prospect_create_form"]["prospect_json"].value(),
+            payload,
+        )
+
+    def test_prospects_list_shows_create_button(self):
+        response = self.client.get(reverse("home:prospects-list"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, reverse("home:prospects-create"))
+        self.assertContains(response, "New Prospect")

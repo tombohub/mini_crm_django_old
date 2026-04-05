@@ -60,6 +60,7 @@
                 </div>
             </aside>
             <main class="container py-2" id="content">
+                {% include 'home/_alerts.html' %}
                 {% block content %}
                     cold calls content
                 {% endblock content %}
