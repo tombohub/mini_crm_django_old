@@ -47,7 +47,7 @@ class ProspectModelTest(DjangoTestCase):
         """Test that has_been_called is False when there are no call records."""
         prospect = Prospect.objects.create(
             business_name="Test Business",
-            industry="Retail",
+            industry="Electrician",
             phone_number="1234567890",
         )
         self.assertFalse(prospect.has_been_called)
@@ -56,7 +56,7 @@ class ProspectModelTest(DjangoTestCase):
         """Test that has_been_called is True when there are call records."""
         prospect = Prospect.objects.create(
             business_name="Test Business",
-            industry="Retail",
+            industry="Electrician",
             phone_number="1234567890",
         )
         ColdCallRecord.objects.create(
@@ -69,7 +69,7 @@ class ProspectModelTest(DjangoTestCase):
         # Create a Prospect instance
         prospect = Prospect.objects.create(
             business_name="Test Business",
-            industry="Test Industry",
+            industry="Electrician",
             phone_number="1234567890",
             city="Test City",
         )
@@ -231,7 +231,7 @@ class ProspectJsonCreateFormTest(DjangoTestCase):
     def test_accepts_valid_json(self):
         form = ProspectJsonCreateForm(
             data={
-                "prospect_json": '{"business_name": "Acme Inc", "industry": "Roofing", "phone_number": "416-555-0100"}'
+                "prospect_json": '{"business_name": "Acme Inc", "industry": "Electrician", "phone_number": "416-555-0100"}'
             }
         )
 
@@ -240,7 +240,7 @@ class ProspectJsonCreateFormTest(DjangoTestCase):
         prospect = form.save()
 
         self.assertEqual(prospect.business_name, "Acme Inc")
-        self.assertEqual(prospect.industry, "Roofing")
+        self.assertEqual(prospect.industry, "Electrician")
 
     def test_rejects_malformed_json(self):
         form = ProspectJsonCreateForm(data={"prospect_json": '{"business_name": '})
@@ -251,7 +251,7 @@ class ProspectJsonCreateFormTest(DjangoTestCase):
     def test_rejects_unknown_fields(self):
         form = ProspectJsonCreateForm(
             data={
-                "prospect_json": '{"business_name": "Acme Inc", "industry": "Roofing", "unknown_field": "value"}'
+                "prospect_json": '{"business_name": "Acme Inc", "industry": "Electrician", "unknown_field": "value"}'
             }
         )
 
@@ -261,7 +261,7 @@ class ProspectJsonCreateFormTest(DjangoTestCase):
     def test_rejects_managed_fields(self):
         form = ProspectJsonCreateForm(
             data={
-                "prospect_json": '{"business_name": "Acme Inc", "industry": "Roofing", "created_at": "2024-01-01T00:00:00Z"}'
+                "prospect_json": '{"business_name": "Acme Inc", "industry": "Electrician", "created_at": "2024-01-01T00:00:00Z"}'
             }
         )
 
@@ -289,7 +289,7 @@ class ProspectCreateViewTest(DjangoTestCase):
         response = self.client.post(
             reverse("home:prospects-create"),
             {
-                "prospect_json": '{"business_name": "Acme Inc", "industry": "Roofing", "phone_number": "416-555-0100"}'
+                "prospect_json": '{"business_name": "Acme Inc", "industry": "Electrician", "phone_number": "416-555-0100"}'
             },
             follow=True,
         )
@@ -298,7 +298,7 @@ class ProspectCreateViewTest(DjangoTestCase):
         self.assertTrue(
             Prospect.objects.filter(
                 phone_number="416-555-0100",
-                industry="Roofing",
+                industry="Electrician",
             ).exists()
         )
         messages = [message.message for message in get_messages(response.wsgi_request)]

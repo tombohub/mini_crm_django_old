@@ -70,7 +70,7 @@ class ProspectJsonCreateForm(forms.Form):
                 "class": "form-control",
                 "rows": 8,
                 "spellcheck": "false",
-                "placeholder": '{\n  "business_name": "Acme Inc",\n  "industry": "Roofing",\n  "phone_number": "416-555-0100"\n}',
+                "placeholder": '{\n  "business_name": "Acme Inc",\n  "industry": "Electrician",\n  "phone_number": "416-555-0100"\n}',
             }
         ),
     )

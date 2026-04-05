@@ -6,6 +6,11 @@ class Prospect(models.Model):
     prospect's business details
     """
 
+    INDUSTRY_CHOICES = [
+        ("Electrician", "Electrician"),
+        ("Plumber", "Plumber"),
+    ]
+
     PROVINCE_CHOICES = [
         ("AB", "Alberta"),
         ("BC", "British Columbia"),
@@ -28,7 +33,7 @@ class Prospect(models.Model):
         UNKNOWN = "unknown"
 
     business_name = models.CharField(max_length=255, null=True, blank=True)
-    industry = models.CharField(max_length=100)
+    industry = models.CharField(max_length=100, choices=INDUSTRY_CHOICES)
     phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
     province = models.CharField(
