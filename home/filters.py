@@ -13,5 +13,5 @@ class ProspectsFilter(django_filters.FilterSet):
 
     class Meta:
         model = models.Prospect
-        fields = ["province", "industry"]
+        fields = ["industry"]
         form = ProspectsFilterSetForm

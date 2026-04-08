@@ -87,7 +87,7 @@ class CallRecordForm(BootstrapFormMixin, forms.ModelForm):
 class ProspectsFilterForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = Prospect
-        fields = ["province"]
+        fields = []
 
 
 class ProspectsFilterSetForm(BootstrapFormMixin, forms.Form):
