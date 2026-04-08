@@ -64,10 +64,10 @@
         </p>
         {# badges #}
         <div>
-            {% if prospect.had_owner_conversation %}
+            {% if prospect.conversation %}
                 <span class="badge text-bg-success rounded-pill">Had conversation</span>
             {% endif %}
-            {% if prospect.has_been_called %}<span class="badge text-bg-warning rounded-pill">Called</span>{% endif %}
+            {% if prospect.called %}<span class="badge text-bg-warning rounded-pill">Called</span>{% endif %}
         </div>
         <a class="btn btn-primary d-block"
            href="{% url 'home:prospects--call-record-create' prospect_id=prospect.id %}?next={{ request.get_full_path|urlencode }}">
