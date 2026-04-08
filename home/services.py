@@ -1,6 +1,4 @@
 import datetime as dt
-from dataclasses import dataclass
-from zoneinfo import ZoneInfo
 
 import pandas as pd
 from django.core.files.uploadedfile import UploadedFile
@@ -211,46 +209,3 @@ def calls_today_count():
     count = ColdCallRecord.objects.filter(date__date=today).count()
     return count
 
-
-def get_city_local_times():
-    """
-    This function returns the current local times for five
-    Canadian cities: Halifax, Toronto, Winnipeg, Edmonton, and Vancouver.
-
-    It uses the Python built-in `zoneinfo` module to handle time zones,
-    and the `datetime` module to get the current time.
-
-    Returns:
-        CityTimes: A dataclass instance containing the local times
-        for the five cities. Each city's time is a string in
-        the format "HH:MM".
-    """
-
-    @dataclass
-    class CityTimes:
-        halifax: str
-        toronto: str
-        winnipeg: str
-        edmonton: str
-        vancouver: str
-
-    time_zones = {
-        "halifax": ZoneInfo("America/Halifax"),
-        "toronto": ZoneInfo("America/Toronto"),
-        "winnipeg": ZoneInfo("America/Winnipeg"),
-        "edmonton": ZoneInfo("America/Edmonton"),
-        "vancouver": ZoneInfo("America/Vancouver"),
-    }
-
-    current_time = lambda time_zone: (
-        dt.datetime.now(time_zone).time().isoformat("minutes")
-    )
-    city_times = CityTimes(
-        halifax=current_time(time_zones["halifax"]),
-        toronto=current_time(time_zones["toronto"]),
-        winnipeg=current_time(time_zones["winnipeg"]),
-        edmonton=current_time(time_zones["edmonton"]),
-        vancouver=current_time(time_zones["vancouver"]),
-    )
-
-    return city_times

@@ -41,7 +41,6 @@ def prospects_list(request):
         "total_calls_count": services.calls_total_count(),
         "calls_today": services.calls_today_count(),
         "prospects_total_count": services.prospects_total_count(),
-        "local_times": services.get_city_local_times(),
         "highlighted_prospect_id": highlighted_prospect_id,
     }
     return render(request, "home/prospects.html", context)
