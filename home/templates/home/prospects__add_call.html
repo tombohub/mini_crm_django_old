@@ -1,10 +1,23 @@
 {% extends 'home/base.html' %}
 {% block content %}
-    <a href="tel:{{ prospect.phone_number }}">
-        <span class="fs-4">
-            <i class="bi bi-telephone">&nbsp;&nbsp;</i> {{ prospect.phone_number }}
-        </span>
-    </a>
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+                <div>
+                    <div class="text-muted small mb-1">Phone number</div>
+                    <a href="tel:{{ prospect.phone_number }}"
+                       class="fs-4 text-decoration-none"
+                       id="prospect-phone-link">{{ prospect.phone_number }}</a>
+                </div>
+                <button type="button"
+                        class="btn btn-outline-secondary"
+                        id="copy-phone-button"
+                        data-phone-text="{{ prospect.phone_number }}">
+                    <i class="bi bi-copy"></i> Copy
+                </button>
+            </div>
+        </div>
+    </div>
     <div class="hstack justify-content-between">
         <div class="d-inline">
             Prospect exists:
@@ -33,4 +46,20 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
     </form>
+    <script>
+        const copyPhoneButton = document.getElementById("copy-phone-button");
+
+        if (copyPhoneButton) {
+            copyPhoneButton.addEventListener("click", async () => {
+                const phoneText = copyPhoneButton.dataset.phoneText;
+
+                try {
+                    await navigator.clipboard.writeText(phoneText);
+                    copyPhoneButton.innerHTML = '<i class="bi bi-check2"></i> Copied';
+                } catch (error) {
+                    copyPhoneButton.innerHTML = '<i class="bi bi-x-circle"></i> Failed';
+                }
+            });
+        }
+    </script>
 {% endblock content %}
