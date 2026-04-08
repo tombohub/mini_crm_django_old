@@ -45,17 +45,12 @@ INSTALLED_APPS = [
     # apps
     "home",
     # plugins
-    "imagekit",
     "debug_toolbar",
     "django_extensions",
     "silk",
     "data_browser",
-    "corsheaders",
-    "widget_tweaks",
     "active_link",
     "django_filters",
-    # django-cleanup needs to be last
-    "django_cleanup",
 ]
 
 MIDDLEWARE = [
