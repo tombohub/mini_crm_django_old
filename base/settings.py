@@ -45,8 +45,6 @@ INSTALLED_APPS = [
     # apps
     "home",
     # plugins
-    "crispy_forms",
-    "crispy_bootstrap5",
     "imagekit",
     "debug_toolbar",
     "django_extensions",
@@ -150,8 +148,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 CSRF_TRUSTED_ORIGINS = ["https://minicrmdjangoold-production.up.railway.app"]
-
-CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 STORAGES = {
     "default": {

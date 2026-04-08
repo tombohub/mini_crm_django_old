@@ -7,7 +7,40 @@ from . import services
 from .models import ColdCallRecord, Prospect
 
 
-class ImportXlsxForm(forms.ModelForm):
+class BootstrapFormMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            widget = field.widget
+            css_classes = widget.attrs.get("class", "").split()
+
+            if isinstance(widget, forms.CheckboxInput):
+                widget.attrs["class"] = " ".join(
+                    sorted(set(css_classes + ["form-check-input"]))
+                )
+                continue
+
+            if isinstance(widget, forms.RadioSelect):
+                continue
+
+            base_class = (
+                "form-select"
+                if isinstance(widget, forms.Select)
+                else "form-control"
+            )
+            widget.attrs["class"] = " ".join(sorted(set(css_classes + [base_class])))
+
+            if field.required:
+                widget.attrs.setdefault("required", "required")
+
+            if field.help_text:
+                widget.attrs.setdefault(
+                    "aria-describedby", f"{field_name}-help"
+                )
+
+
+class ImportXlsxForm(BootstrapFormMixin, forms.ModelForm):
     """
     Form for uploading a excel file.
     """
@@ -29,7 +62,7 @@ class ImportXlsxForm(forms.ModelForm):
         return excel_file
 
 
-class YellowPagesCaHtmlForm(forms.Form):
+class YellowPagesCaHtmlForm(BootstrapFormMixin, forms.Form):
     """
     For for pasting yellow pages canada page to import
     prospects data
@@ -38,7 +71,7 @@ class YellowPagesCaHtmlForm(forms.Form):
     html = forms.CharField(widget=forms.Textarea)
 
 
-class CallRecordForm(forms.ModelForm):
+class CallRecordForm(BootstrapFormMixin, forms.ModelForm):
     """
     Create call record
     """
@@ -47,18 +80,17 @@ class CallRecordForm(forms.ModelForm):
         model = ColdCallRecord
         exclude = ["created_at", "updated_at"]
         widgets = {
-            "date": forms.DateTimeInput(attrs={"type": "datetime"}),
-            "outcome": forms.RadioSelect(attrs={"class": "btn-check"}),
+            "date": forms.DateTimeInput(attrs={"type": "datetime-local"}),
         }
 
 
-class ProspectsFilterForm(forms.ModelForm):
+class ProspectsFilterForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = Prospect
         fields = ["province"]
 
 
-class ProspectJsonCreateForm(forms.Form):
+class ProspectJsonCreateForm(BootstrapFormMixin, forms.Form):
     """
     Create a prospect from a JSON payload.
     """

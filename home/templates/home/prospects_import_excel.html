@@ -1,5 +1,4 @@
 {% extends 'home/base.html' %}
-{% load crispy_forms_filters %}
 {% block navigation %}
     {% include 'home/_navigation.html' %}
 {% endblock navigation %}
@@ -7,7 +6,7 @@
     <form method="post" enctype="multipart/form-data">
         <div class="vstack gap-2">
             {% csrf_token %}
-            {{ import_excel_form|crispy }}
+            {% include 'home/_form_fields.html' with form=import_excel_form %}
             <button type="submit" class="btn btn-primary">Submit</button>
             <a class="btn" href="{% url 'home:prospects-list' %}">Cancel</a>
         </div>

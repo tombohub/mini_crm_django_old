@@ -1,6 +1,4 @@
 {% extends 'home/base.html' %}
-{% load crispy_forms_filters %}
-{% load widget_tweaks %}
 {% block content %}
     {# prospects primary actions #}
     <div class="mb-3">
@@ -34,7 +32,7 @@
     <div class="collapse" id="filters">
         <div class="card card-body">
             <form>
-                {{ prospects_filter.form|crispy }}
+                {% include 'home/_form_fields.html' with form=prospects_filter.form %}
                 <button class="btn btn-secondary">Apply</button>
             </form>
         </div>
