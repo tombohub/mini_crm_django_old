@@ -90,6 +90,8 @@ class ColdCallRecord(models.Model):
         ("no", "no"),
         ("yes", "yes"),
         ("meeting", "meeting"),
+        ("hang_up", "hang up"),
+        ("undefined", "undefined"),
     ]
 
     PICK_UP_STATUS_CHOICES = [
@@ -113,15 +115,6 @@ class ColdCallRecord(models.Model):
         choices=OUTCOME_CHOICES, blank=True, null=True, max_length=255
     )
     prospect = models.ForeignKey(Prospect, on_delete=models.PROTECT, null=True)
-    my_area_code_city = models.CharField(
-        max_length=100,
-        blank=True,
-        null=True,
-        default="Toronto",
-    )
-    product_selling = models.CharField(max_length=255, null=True, blank=True)
-    opening = models.CharField(max_length=255, blank=True, null=True)
-    objection = models.CharField(max_length=255, blank=True, null=True)
     note = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
