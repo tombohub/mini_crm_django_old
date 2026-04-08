@@ -1,6 +1,7 @@
 import django_filters
 
 from . import models
+from .forms import ProspectsFilterSetForm
 
 
 class ProspectsFilter(django_filters.FilterSet):
@@ -13,3 +14,4 @@ class ProspectsFilter(django_filters.FilterSet):
     class Meta:
         model = models.Prospect
         fields = ["province", "industry"]
+        form = ProspectsFilterSetForm

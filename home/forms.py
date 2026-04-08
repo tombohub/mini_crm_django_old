@@ -90,6 +90,10 @@ class ProspectsFilterForm(BootstrapFormMixin, forms.ModelForm):
         fields = ["province"]
 
 
+class ProspectsFilterSetForm(BootstrapFormMixin, forms.Form):
+    pass
+
+
 class ProspectJsonCreateForm(BootstrapFormMixin, forms.Form):
     """
     Create a prospect from a JSON payload.
