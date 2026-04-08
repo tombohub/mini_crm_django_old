@@ -15,7 +15,6 @@ dependencies = [
     "django-silk>=5.1.0",
     "django-data-browser>=4.2.8",
     "django-cors-headers>=4.3.1",
-    "django-fsm>=2.8.1",
     "beautifulsoup4>=4.12.3",
     "django-widget-tweaks>=1.5.0",
     "python-decouple>=3.8",
