@@ -1,0 +1,45 @@
+<div class="card mb-4 border-0 shadow-sm" id="prospect-existence-card">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+            <div>
+                <div class="text-muted small text-uppercase fw-semibold mb-1">Business status</div>
+                <div class="fw-semibold fs-5" id="exists_status">
+                    {% if prospect.existence_status == "exists" %}
+                        Exists
+                    {% elif prospect.existence_status == "does_not_exist" %}
+                        Not Exists
+                    {% else %}
+                        Unknown
+                    {% endif %}
+                </div>
+            </div>
+            <span id="indicator"
+                  class="htmx-indicator spinner-border spinner-border-sm text-secondary"
+                  aria-hidden="true"></span>
+        </div>
+        <div class="btn-group w-100"
+             role="group"
+             aria-label="Update prospect existence status">
+            <button hx-get="{% url 'home:htmx' action='update_existence_status' %}?existence_status=exists&prospect_id={{ prospect.id }}"
+                    hx-trigger="click"
+                    hx-target="#prospect-existence-card"
+                    hx-swap="outerHTML"
+                    hx-indicator="#indicator"
+                    hx-disabled-elt="this"
+                    type="button"
+                    class="btn {% if prospect.existence_status == 'exists' %}btn-success{% else %}btn-outline-success{% endif %} py-3 fw-semibold">
+                <i class="bi bi-check-circle me-1"></i> Exists
+            </button>
+            <button hx-get="{% url 'home:htmx' action='update_existence_status' %}?existence_status=does_not_exist&prospect_id={{ prospect.id }}"
+                    hx-trigger="click"
+                    hx-target="#prospect-existence-card"
+                    hx-swap="outerHTML"
+                    hx-indicator="#indicator"
+                    hx-disabled-elt="this"
+                    type="button"
+                    class="btn {% if prospect.existence_status == 'does_not_exist' %}btn-danger{% else %}btn-outline-danger{% endif %} py-3 fw-semibold">
+                <i class="bi bi-x-circle me-1"></i> Not Exists
+            </button>
+        </div>
+    </div>
+</div>

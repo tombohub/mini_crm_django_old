@@ -160,8 +160,8 @@ def htmx_test(request, action: str):
             prospect.full_clean()
             prospect.save()
 
-            context = {"existence_status": existence_status}
-            return render(request, "home/htmx/test.html", context)
+            context = {"prospect": prospect}
+            return render(request, "home/_prospect_existence_card.html", context)
 
         case _:
             return HttpResponseBadRequest(f"invalid action: {action}".encode())

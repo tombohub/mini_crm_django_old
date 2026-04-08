@@ -1,6 +1,6 @@
 {% extends 'home/base.html' %}
 {% block content %}
-    <div class="card mb-3">
+    <div class="card mb-3 border-0 shadow-sm">
         <div class="card-body">
             <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
                 <div>
@@ -18,27 +18,7 @@
             </div>
         </div>
     </div>
-    <div class="hstack justify-content-between">
-        <div class="d-inline">
-            Prospect exists:
-            <span id="exists_status">{{ prospect.existence_status }}</span>
-            <span id="indicator" class="htmx-indicator spinner-border"></span>
-        </div>
-        <div>
-            <button hx-get="{% url 'home:htmx' action='update_existence_status' %}?existence_status=exists&prospect_id={{ prospect.id }}"
-                    hx-trigger="click"
-                    hx-target="#exists_status"
-                    hx-indicator="#indicator"
-                    hx-disabled-elt="this"
-                    class="btn btn-success">Yes</button>
-            <button hx-get="{% url 'home:htmx' action='update_existence_status' %}?existence_status=does_not_exist&prospect_id={{ prospect.id }}"
-                    hx-trigger="click"
-                    hx-target="#exists_status"
-                    hx-indicator="#indicator"
-                    hx-disabled-elt="this"
-                    class="btn btn-danger">No</button>
-        </div>
-    </div>
+    {% include 'home/_prospect_existence_card.html' %}
     <form method="post">
         <div class="vstack gap-2">
             {% csrf_token %}

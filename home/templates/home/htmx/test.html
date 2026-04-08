@@ -1,1 +1,7 @@
-{{ existence_status }}
+{% if existence_status == "exists" %}
+    Exists
+{% elif existence_status == "does_not_exist" %}
+    Not Exists
+{% else %}
+    Unknown
+{% endif %}
