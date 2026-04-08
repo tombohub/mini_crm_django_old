@@ -15,3 +15,6 @@ reload:
 
 test:
 	uv run pytest --reuse-db
+
+sass:
+	npx sass home/static/home/custom.scss home/static/home/custom.css
