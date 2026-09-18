@@ -1,0 +1,31 @@
+<nav class="navbar">
+    <div class="container-fluid">
+        <a href="/" class="navbar-brand">Home</a>
+        <button class="navbar-toggler" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-navbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</nav>
+<div class="offcanvas offcanvas-end" id="offcanvas-navbar">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Navigation</h5>
+        <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-0 h-100 d-flex flex-column">
+        <!-- TOP -->
+        <div class="list-group list-group-flush flex-grow-1">
+            <a class="list-group-item list-group-item-action" href="{% url 'home:call-records' %}">Call Records</a>
+            <a class="list-group-item list-group-item-action" href="{% url 'home:prospects-list' %}">Prospects</a>
+        </div>
+        <!-- BOTTOM -->
+        <div class="list-group list-group-flush">
+            <a class="list-group-item list-group-item-action" href="{% url 'admin:index' %}">Admin</a>
+            <a class="list-group-item list-group-item-action" href="{% url 'data_browser:home' %}">Data
+                Browser</a>
+            <a class="list-group-item list-group-item-action" href="{% url 'silk:summary' %}">Silk</a>
+            <form action="#" method=" post">
+                <button class="list-group-item list-group-item-action w-100 text-start">Logout</button>
+            </form>
+        </div>
+    </div>
+</div>
